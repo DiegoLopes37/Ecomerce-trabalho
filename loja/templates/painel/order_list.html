@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Pedidos (painel){% endblock %}
+{% block content %}
+<h1>Pedidos</h1>
+<p class="filters">
+  <a href="{% url 'painel:orders' %}" {% if not current %}class="active"{% endif %}>Todos</a>
+  {% for value, label in statuses %}<a href="?status={{ value }}" {% if current == value %}class="active"{% endif %}>{{ label }}</a>{% endfor %}
+</p>
+{% if orders %}
+<div class="table-wrap">
+<table class="table">
+  <thead><tr><th>Pedido</th><th>Cliente</th><th>Data</th><th>Status</th><th>Total</th><th></th></tr></thead>
+  <tbody>
+  {% for o in orders %}
+    <tr>
+      <td data-label="Pedido">#{{ o.pk }}</td>
+      <td data-label="Cliente">{{ o.full_name }} ({{ o.user.username }})</td>
+      <td data-label="Data">{{ o.created_at|date:"d/m/Y H:i" }}</td>
+      <td data-label="Status"><span class="status {{ o.status }}">{{ o.get_status_display }}</span></td>
+      <td data-label="Total">R$ {{ o.total|floatformat:2 }}</td>
+      <td><a href="{% url 'painel:order_detail' o.pk %}">Abrir</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}<p class="muted">Nenhum pedido encontrado.</p>{% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Produtos (painel){% endblock %}
+{% block content %}
+<h1>Produtos</h1>
+<p><a class="btn" href="{% url 'painel:product_create' %}">Novo produto</a> <a class="btn secondary" href="{% url 'painel:dashboard' %}">Painel</a></p>
+{% if products %}
+<div class="table-wrap">
+<table class="table">
+  <thead><tr><th>Nome</th><th>Preço</th><th>Estoque</th><th>Ativo</th><th></th></tr></thead>
+  <tbody>
+  {% for p in products %}
+    <tr>
+      <td data-label="Nome">{{ p.name }}</td>
+      <td data-label="Preço">R$ {{ p.price|floatformat:2 }}</td>
+      <td data-label="Estoque">{{ p.stock }}</td>
+      <td data-label="Ativo">{{ p.active|yesno:"Sim,Não" }}</td>
+      <td class="actions">
+        <a class="btn small secondary" href="{% url 'painel:product_edit' p.pk %}">Editar</a>
+        <form method="post" action="{% url 'painel:product_delete' p.pk %}" class="inline" onsubmit="return confirm('Excluir {{ p.name|escapejs }}?');">{% csrf_token %}
+          <button class="btn small danger" type="submit">Excluir</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}<p class="muted">Nenhum produto cadastrado.</p>{% endif %}
+{% endblock %}

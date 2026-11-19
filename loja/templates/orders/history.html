@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Meus pedidos{% endblock %}
+{% block content %}
+<h1>Meus pedidos</h1>
+{% if orders %}
+  <div class="table-wrap">
+  <table class="table">
+    <thead><tr><th>Pedido</th><th>Data</th><th>Status</th><th>Total</th><th></th></tr></thead>
+    <tbody>
+    {% for o in orders %}
+      <tr>
+        <td data-label="Pedido">#{{ o.pk }}</td>
+        <td data-label="Data">{{ o.created_at|date:"d/m/Y H:i" }}</td>
+        <td data-label="Status"><span class="status {{ o.status }}">{{ o.get_status_display }}</span></td>
+        <td data-label="Total">R$ {{ o.total|floatformat:2 }}</td>
+        <td><a href="{% url 'orders:detail' o.pk %}">Detalhes</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+{% else %}
+  <p class="muted">Você ainda não fez nenhum pedido.</p>
+{% endif %}
+{% endblock %}

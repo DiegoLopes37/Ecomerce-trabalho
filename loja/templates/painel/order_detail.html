@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Pedido #{{ order.pk }}{% endblock %}
+{% block content %}
+<p><a href="{% url 'painel:orders' %}">« Pedidos</a></p>
+<h1>Pedido #{{ order.pk }} <span class="status {{ order.status }}">{{ order.get_status_display }}</span></h1>
+<div class="two-col">
+  <section class="panel">
+    <h2>Itens</h2>
+    <ul class="plain">
+      {% for i in order.items.all %}<li>{{ i.quantity }}× {{ i.product_name }} <span>R$ {{ i.subtotal|floatformat:2 }}</span></li>{% endfor %}
+    </ul>
+    <p class="total">Total: <strong>R$ {{ order.total|floatformat:2 }}</strong></p>
+    <h2>Cliente</h2>
+    <p>{{ order.full_name }} ({{ order.user.username }})<br>{{ order.user.email }}<br>{{ order.phone }}</p>
+    <p>{{ order.address|linebreaksbr }}</p>
+  </section>
+  <section class="panel">
+    <h2>Alterar status</h2>
+    {% if order.status == 'cancelled' %}
+      <p class="muted">Pedido cancelado — não pode ser alterado.</p>
+    {% else %}
+      <form method="post" novalidate>{% csrf_token %}
+        {% include '_form.html' %}
+        <button class="btn" type="submit">Atualizar</button>
+      </form>
+      <p class="muted">Ao cancelar, os itens voltam ao estoque.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

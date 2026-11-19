@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<p><a href="{% url 'catalog:list' %}">« Voltar aos produtos</a></p>
+<section class="detail">
+  <div class="detail-img">
+    {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<span class="noimg big">🧶</span>{% endif %}
+  </div>
+  <div>
+    <h1>{{ product.name }}</h1>
+    <p class="price big">R$ {{ product.price|floatformat:2 }}</p>
+    <p>{{ product.description|linebreaksbr }}</p>
+    {% if product.in_stock %}
+      <p class="muted">{{ product.stock }} em estoque</p>
+      <form method="post" action="{% url 'cart:add' product.id %}" class="row">{% csrf_token %}
+        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" aria-label="Quantidade" class="qty">
+        <button class="btn" type="submit">Adicionar ao carrinho</button>
+      </form>
+    {% else %}<span class="btn disabled">Esgotado</span>{% endif %}
+  </div>
+</section>
+{% endblock %}

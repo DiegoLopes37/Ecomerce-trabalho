@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Painel{% endblock %}
+{% block content %}
+<h1>Painel administrativo</h1>
+<div class="grid stats">
+  <a class="stat" href="{% url 'painel:products' %}"><strong>{{ products }}</strong> produtos cadastrados</a>
+  <a class="stat" href="{% url 'painel:orders' %}?status=pending"><strong>{{ pending }}</strong> pedidos pendentes</a>
+  <a class="stat" href="{% url 'painel:products' %}"><strong>{{ low_stock }}</strong> com estoque baixo (≤ 3)</a>
+</div>
+<p>
+  <a class="btn" href="{% url 'painel:product_create' %}">Novo produto</a>
+  <a class="btn secondary" href="{% url 'painel:orders' %}">Ver pedidos</a>
+</p>
+{% endblock %}

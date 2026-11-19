@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Início{% endblock %}
+{% block content %}
+<section class="hero">
+  <img src="{% static 'img/logo.png' %}" alt="Logo Crochê da Isa" width="120" height="120">
+  <div>
+    <h1>Crochê da Isa</h1>
+    <p>Peças artesanais feitas à mão, com carinho em cada ponto.</p>
+    <a class="btn" href="{% url 'catalog:list' %}">Ver todos os produtos</a>
+  </div>
+</section>
+
+<h2>Destaques</h2>
+{% if destaques %}
+  <div class="grid">{% for p in destaques %}{% include 'catalog/_card.html' %}{% endfor %}</div>
+{% else %}
+  <p class="muted">Ainda não há produtos disponíveis. Volte em breve!</p>
+{% endif %}
+{% endblock %}

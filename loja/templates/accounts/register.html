@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Cadastro{% endblock %}
+{% block content %}
+<div class="panel narrow">
+  <h1>Criar conta</h1>
+  <form method="post" novalidate>{% csrf_token %}
+    {% include '_form.html' %}
+    <button class="btn" type="submit">Cadastrar</button>
+  </form>
+  <p>Já tem conta? <a href="{% url 'accounts:login' %}">Entrar</a></p>
+</div>
+{% endblock %}

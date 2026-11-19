@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Finalizar compra{% endblock %}
+{% block content %}
+<h1>Finalizar compra</h1>
+<div class="two-col">
+  <section class="panel">
+    <h2>Dados de entrega</h2>
+    <form method="post" novalidate>{% csrf_token %}
+      {% include '_form.html' %}
+      <button class="btn" type="submit">Confirmar pedido</button>
+    </form>
+  </section>
+  <section class="panel">
+    <h2>Resumo</h2>
+    <ul class="plain">
+      {% for i in items %}<li>{{ i.quantity }}× {{ i.product.name }} <span>R$ {{ i.subtotal|floatformat:2 }}</span></li>{% endfor %}
+    </ul>
+    <p class="total">Total: <strong>R$ {{ total|floatformat:2 }}</strong></p>
+  </section>
+</div>
+{% endblock %}

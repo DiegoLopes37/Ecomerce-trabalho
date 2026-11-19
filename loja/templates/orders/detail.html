@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Pedido #{{ order.pk }}{% endblock %}
+{% block content %}
+<p><a href="{% url 'orders:history' %}">« Meus pedidos</a></p>
+<h1>Pedido #{{ order.pk }} <span class="status {{ order.status }}">{{ order.get_status_display }}</span></h1>
+<p class="muted">Realizado em {{ order.created_at|date:"d/m/Y H:i" }}</p>
+<div class="two-col">
+  <section class="panel">
+    <h2>Itens</h2>
+    <ul class="plain">
+      {% for i in order.items.all %}<li>{{ i.quantity }}× {{ i.product_name }} <span>R$ {{ i.subtotal|floatformat:2 }}</span></li>{% endfor %}
+    </ul>
+    <p class="total">Total: <strong>R$ {{ order.total|floatformat:2 }}</strong></p>
+  </section>
+  <section class="panel">
+    <h2>Entrega</h2>
+    <p>{{ order.full_name }}<br>{{ order.phone }}</p>
+    <p>{{ order.address|linebreaksbr }}</p>
+  </section>
+</div>
+{% endblock %}

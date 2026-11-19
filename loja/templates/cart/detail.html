@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Carrinho{% endblock %}
+{% block content %}
+<h1>Seu carrinho</h1>
+{% if items %}
+  <div class="table-wrap">
+  <table class="table">
+    <thead><tr><th>Produto</th><th>Preço</th><th>Quantidade</th><th>Subtotal</th><th></th></tr></thead>
+    <tbody>
+    {% for i in items %}
+      <tr>
+        <td data-label="Produto"><a href="{{ i.product.get_absolute_url }}">{{ i.product.name }}</a></td>
+        <td data-label="Preço">R$ {{ i.product.price|floatformat:2 }}</td>
+        <td data-label="Quantidade">
+          <form method="post" action="{% url 'cart:update' i.product.id %}" class="row">{% csrf_token %}
+            <input type="number" class="qty" name="quantity" value="{{ i.quantity }}" min="0" max="{{ i.product.stock }}" aria-label="Quantidade">
+            <button class="btn small secondary" type="submit">Atualizar</button>
+          </form>
+        </td>
+        <td data-label="Subtotal">R$ {{ i.subtotal|floatformat:2 }}</td>
+        <td>
+          <form method="post" action="{% url 'cart:remove' i.product.id %}">{% csrf_token %}
+            <button class="btn small danger" type="submit">Remover</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <p class="total">Total: <strong>R$ {{ total|floatformat:2 }}</strong></p>
+  <a class="btn" href="{% url 'orders:checkout' %}">Finalizar compra</a>
+  <a class="btn secondary" href="{% url 'catalog:list' %}">Continuar comprando</a>
+{% else %}
+  <p class="muted">Seu carrinho está vazio.</p>
+  <a class="btn" href="{% url 'catalog:list' %}">Ver produtos</a>
+{% endif %}
+{% endblock %}

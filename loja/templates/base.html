@@ -1,0 +1,46 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Crochê da Isa{% endblock %} · Crochê da Isa</title>
+  <link rel="icon" href="{% static 'img/logo.png' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="{% url 'catalog:home' %}">
+      <img src="{% static 'img/logo.png' %}" alt="" width="40" height="40"> Crochê da Isa
+    </a>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+    <label for="menu-toggle" class="menu-btn" aria-hidden="true">☰</label>
+    <nav class="menu">
+      <a href="{% url 'catalog:list' %}">Produtos</a>
+      <a href="{% url 'cart:detail' %}">Carrinho{% if cart_count %} <span class="badge">{{ cart_count }}</span>{% endif %}</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'orders:history' %}">Meus pedidos</a>
+        {% if user.is_staff %}<a href="{% url 'painel:dashboard' %}">Painel</a>{% endif %}
+        <form method="post" action="{% url 'accounts:logout' %}" class="inline">{% csrf_token %}
+          <button class="link-btn" type="submit">Sair ({{ user.username }})</button>
+        </form>
+      {% else %}
+        <a href="{% url 'accounts:login' %}">Entrar</a>
+        <a href="{% url 'accounts:register' %}">Cadastrar</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  {% if messages %}
+    <div class="messages">
+      {% for m in messages %}<div class="msg {{ m.tags }}" role="alert">{{ m }}</div>{% endfor %}
+    </div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer"><div class="container">© Crochê da Isa — produtos artesanais feitos à mão</div></footer>
+</body>
+</html>
